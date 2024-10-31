@@ -1,46 +1,39 @@
 package main
 
 import (
-	"fmt"
+	"go-console/internal/api"
 
+	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
 func main() {
-	// Create a new application
+	// Initialize the Fyne application
 	myApp := app.New()
-	myWindow := myApp.NewWindow("Minecraft Server Manager")
+	w := myApp.NewWindow("Go-Console")
 
-	// Button to start the server
-	startButton := widget.NewButton("Start Server", func() {
-		// Logic to send start command through WebSocket
-		fmt.Println("Starting server...")
-		// Call your function to send the start command here
-	})
+	// Create client (assuming you have a function in your api package to create one)
+	client := api.NewClient() // Replace with your actual client creation logic
 
-	// Button to stop the server
-	stopButton := widget.NewButton("Stop Server", func() {
-		// Logic to send stop command through WebSocket
-		fmt.Println("Stopping server...")
-		// Call your function to send the stop command here
-	})
+	// Set the window content
+	w.SetContent(mainWindow(client))
+	w.ShowAndRun()
+}
 
-	// Console button (real-time updates)
-	consoleButton := widget.NewButton("Open Console", func() {
-		// Logic to connect to WebSocket and display console output
-		fmt.Println("Opening console...")
-		// Set up a separate UI window or panel for console output
-	})
-
-	// Arrange buttons in a vertical layout
-	myWindow.SetContent(container.NewVBox(
-		startButton,
-		stopButton,
-		consoleButton,
-	))
-
-	// Launch the app
-	myWindow.ShowAndRun()
+// mainWindow creates the UI layout for the main application window
+func mainWindow(client *api.APIClient) fyne.CanvasObject {
+	return container.NewVBox(
+		widget.NewLabel("Welcome to Go-Console"),
+		widget.NewButton("Start Server", func() {
+			// Logic to start the server using the API client
+			// e.g., client.StartServer()
+		}),
+		widget.NewButton("Stop Server", func() {
+			// Logic to stop the server using the API client
+			// e.g., client.StopServer()
+		}),
+		// Add more buttons and UI elements as needed
+	)
 }
